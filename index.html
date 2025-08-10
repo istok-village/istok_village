@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>КП «Исток» — Генеральный план</title>
+<title>КП «Исток»</title>
 <style>
   body {
     font-family: Arial, sans-serif;
@@ -19,6 +19,7 @@
     display: flex;
     gap: 10px;
     flex-wrap: nowrap;
+    justify-content: center;
   }
   select, input, button {
     padding: 6px 8px;
@@ -51,12 +52,16 @@
     stroke: #333;
     stroke-width: 1;
     transition: opacity 0.3s;
+    outline: none; /* убрать синий прямоугольник при фокусе */
   }
   polygon:hover {
     stroke-width: 3;
     stroke: orange;
   }
-  .status-Свободен { fill: rgba(144,238,144,0.5); }
+  polygon:focus {
+    outline: none; /* убрать синий прямоугольник при фокусе */
+  }
+  .status-Свободен { fill: rgba(144,238,144,0.5); } /* светло-зелёный */
   .status-Бронь { fill: rgba(255,255,0,0.5); }
   .status-Продан { fill: rgba(255,0,0,0.5); }
 
@@ -69,28 +74,25 @@
     pointer-events: none;
     display: none;
     z-index: 10;
-    max-width: 90vw;
-    box-sizing: border-box;
-    word-wrap: break-word;
+    max-width: 90vw;        /* максимум 90% ширины экрана */
+    word-wrap: break-word;  /* перенос слов */
     box-shadow: 0 2px 6px rgba(0,0,0,0.15);
     border-radius: 4px;
-    transition: font-size 0.3s ease;
+    box-sizing: border-box;
   }
-
-  .legend-container {
-    width: 100%;
-    background-color: #f8f0e3; /* фон из шапки */
-    padding: 12px 0;
+  .legend {
     margin-top: 12px;
     display: flex;
-    justify-content: center;
-    user-select: none;
-  }
-
-  .legend {
-    display: flex;
-    gap: 40px;
+    gap: 20px;
     font-size: 18px;
+    user-select: none;
+    justify-content: center;
+    width: 100%;
+    max-width: 1200px;
+    background-color: #f8f0e3; /* как в шапке */
+    padding: 8px 20px;
+    border-radius: 6px;
+    box-sizing: border-box;
   }
   .legend-item {
     display: flex;
@@ -98,19 +100,21 @@
     gap: 8px;
   }
   .legend-color {
-    width: 24px;
-    height: 24px;
+    width: 22px;
+    height: 22px;
     border-radius: 3px;
   }
   .legend-Свободен { background: rgba(144,238,144,0.5); }
   .legend-Бронь { background: rgba(255,255,0,0.5); }
   .legend-Продан { background: rgba(255,0,0,0.5); }
 
-  /* Мобильные стили */
-  @media (max-width:600px) {
+  @media (max-width: 600px) {
     #controls {
       flex-direction: column;
       gap: 10px;
+      font-size: 16px;
+      justify-content: center;
+      align-items: stretch;
     }
     select, input, button {
       font-size: 16px;
@@ -120,22 +124,22 @@
       box-sizing: border-box;
     }
     #tooltip {
-      font-size: 12px;
-      max-width: 95vw;
+      font-size: 16px;
+      max-width: 90vw;
     }
     .legend {
-      gap: 20px;
-      font-size: 16px;
+      font-size: 18px;
+      gap: 15px;
     }
     .legend-color {
-      width: 18px;
-      height: 18px;
+      width: 22px;
+      height: 22px;
     }
   }
 
   /* Шапка */
   #main-header {
-    background-color: #f8f0e3;
+    background-color: #f8f0e3; /* бежевый */
     display: flex;
     justify-content: center;
     align-items: center;
@@ -144,26 +148,18 @@
     box-sizing: border-box;
     position: relative;
   }
-
   #main-header h1 {
     margin: 0;
     font-size: 24px;
     color: #91693f;
     text-align: center;
   }
-
   #logo {
     position: absolute;
     left: 20px;
     height: 50px;
     width: auto;
   }
-
-  /* Убираем синий прямоугольник при фокусе */
-  polygon:focus {
-    outline: none;
-  }
-
 </style>
 </head>
 <body>
@@ -175,8 +171,8 @@
 
 <div id="controls">
   <input type="number" id="filter-num" placeholder="Номер участка" min="1" />
-  <input type="number" id="filter-area-min" placeholder="Площадь от" min="0" step="0.01">
-  <input type="number" id="filter-area-max" placeholder="Площадь до" min="0" step="0.01">
+  <input type="number" id="filter-area-min" placeholder="Площадь от" min="0" step="0.01" />
+  <input type="number" id="filter-area-max" placeholder="Площадь до" min="0" step="0.01" />
   <select id="filter-status">
     <option value="">Все статусы</option>
     <option value="Свободен">Свободен</option>
@@ -193,12 +189,10 @@
   <div id="tooltip" role="tooltip" aria-hidden="true"></div>
 </div>
 
-<div class="legend-container" aria-label="Легенда статусов участков">
-  <div class="legend">
-    <div class="legend-item"><div class="legend-color legend-Свободен"></div> Свободен</div>
-    <div class="legend-item"><div class="legend-color legend-Бронь"></div> Бронь</div>
-    <div class="legend-item"><div class="legend-color legend-Продан"></div> Продан</div>
-  </div>
+<div class="legend" aria-label="Легенда статусов участков">
+  <div class="legend-item"><div class="legend-color legend-Свободен"></div> Свободен</div>
+  <div class="legend-item"><div class="legend-color legend-Бронь"></div> Бронь</div>
+  <div class="legend-item"><div class="legend-color legend-Продан"></div> Продан</div>
 </div>
   
 <script>
