@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>КП "Исток"</title>
+<title>КП «Исток»</title>
 <style>
   body {
     font-family: Arial, sans-serif;
@@ -14,48 +14,17 @@
     align-items: center;
     padding: 10px;
   }
-  /* Хедер */
-  #main-header {
-    background-color: #f8f0e3; /* бежевый */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 10px 20px;
-    width: 100%;
-    box-sizing: border-box;
-    position: relative;
-  }
-
-  #main-header h1 {
-    margin: 0;
-    font-size: 24px;
-    color: #91693f;
-    text-align: center;
-  }
-
-  #logo {
-    position: absolute;
-    left: 20px;
-    height: 50px;
-    width: auto;
-  }
-
-  /* Фильтры */
   #controls {
     margin: 10px 0;
     display: flex;
     gap: 10px;
     flex-wrap: nowrap;
-    max-width: 100%;
-    overflow-x: auto;
+    justify-content: center;
   }
-  #controls > * {
-    padding: 8px 12px;
-    font-size: 16px;
-    flex-shrink: 0;
+  select, input, button {
+    padding: 6px 8px;
+    font-size: 14px;
   }
-
-  /* Карта и SVG */
   #map-container {
     position: relative;
     max-width: 100vw;
@@ -83,20 +52,19 @@
     stroke: #333;
     stroke-width: 1;
     transition: opacity 0.3s;
-    outline: none; /* Убирает синий прямоугольник при клике */
+    outline: none; /* убрать синий прямоугольник при фокусе */
   }
-  polygon:hover, polygon:focus {
+  polygon:hover {
     stroke-width: 3;
     stroke: orange;
-    outline: none; /* дополнительно для фокуса */
   }
-
-  /* Цвета статусов */
+  polygon:focus {
+    outline: none; /* убрать синий прямоугольник при фокусе */
+  }
   .status-Свободен { fill: rgba(144,238,144,0.5); } /* светло-зелёный */
   .status-Бронь { fill: rgba(255,255,0,0.5); }
   .status-Продан { fill: rgba(255,0,0,0.5); }
 
-  /* Всплывающая подсказка */
   #tooltip {
     position: absolute;
     background: white;
@@ -106,86 +74,106 @@
     pointer-events: none;
     display: none;
     z-index: 10;
-    max-width: 220px;
+    max-width: 90vw;        /* максимум 90% ширины экрана */
+    word-wrap: break-word;  /* перенос слов */
     box-shadow: 0 2px 6px rgba(0,0,0,0.15);
     border-radius: 4px;
+    box-sizing: border-box;
   }
-
-  /* Легенда статусов под картой */
-
-.legend {
-  margin-top: 12px;
-  display: flex;
-  gap: 20px;
-  font-size: 16px;
-  user-select: none;
-
-  background-color: #f8f0e3; /* фон как в шапке */
-  padding: 10px 20px;
-  border-radius: 0; /* чтобы не было закруглений */
-  width: 100%;
-  box-sizing: border-box; /* чтобы padding учитывался в ширине */
-  justify-content: center; /* по центру, можно заменить на flex-start */
-}
-
+  .legend {
+    margin-top: 12px;
+    display: flex;
+    gap: 20px;
+    font-size: 18px;
+    user-select: none;
+    justify-content: center;
+    width: 100%;
+    max-width: 1200px;
+    background-color: #f8f0e3; /* как в шапке */
+    padding: 8px 20px;
+    border-radius: 6px;
+    box-sizing: border-box;
+  }
   .legend-item {
     display: flex;
     align-items: center;
-    gap: 10px;
-    white-space: nowrap;
+    gap: 8px;
   }
   .legend-color {
-    width: 24px;
-    height: 24px;
+    width: 22px;
+    height: 22px;
     border-radius: 3px;
   }
   .legend-Свободен { background: rgba(144,238,144,0.5); }
   .legend-Бронь { background: rgba(255,255,0,0.5); }
   .legend-Продан { background: rgba(255,0,0,0.5); }
 
-  /* Мобильная адаптация */
   @media (max-width: 600px) {
     #controls {
       flex-direction: column;
-      gap: 8px;
-      overflow-x: visible;
+      gap: 10px;
+      font-size: 16px;
+      justify-content: center;
+      align-items: stretch;
     }
-    #controls > * {
+    select, input, button {
+      font-size: 16px;
+      padding: 8px 12px;
+      margin: 0 !important;
       width: 100%;
       box-sizing: border-box;
-      flex-shrink: 1;
-      font-size: 16px;
     }
     #tooltip {
       font-size: 16px;
       max-width: 90vw;
     }
     .legend {
-      font-size: 20px;
+      font-size: 18px;
       gap: 15px;
-      overflow-x: visible;
-      flex-wrap: wrap;
-      justify-content: flex-start;
     }
     .legend-color {
-      width: 28px;
-      height: 28px;
+      width: 22px;
+      height: 22px;
     }
+  }
+
+  /* Шапка */
+  #main-header {
+    background-color: #f8f0e3; /* бежевый */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px 20px;
+    width: 100%;
+    box-sizing: border-box;
+    position: relative;
+  }
+  #main-header h1 {
+    margin: 0;
+    font-size: 24px;
+    color: #91693f;
+    text-align: center;
+  }
+  #logo {
+    position: absolute;
+    left: 20px;
+    height: 50px;
+    width: auto;
   }
 </style>
 </head>
 <body>
 
-<header id="main-header">
+<header id="main-header" style="display:flex; align-items:center;">
   <img id="logo" src="logo.png" alt="Логотип поселка" />
-  <h1>КП "Исток"</h1>
+  <h1 style="color:#91693f; margin:0;">КП «Исток»</h1>
 </header>
 
-<div id="controls" role="region" aria-label="Фильтры участков">
+<div id="controls">
   <input type="number" id="filter-num" placeholder="Номер участка" min="1" />
   <input type="number" id="filter-area-min" placeholder="Площадь от" min="0" step="0.01" />
   <input type="number" id="filter-area-max" placeholder="Площадь до" min="0" step="0.01" />
-  <select id="filter-status" aria-label="Статус участка">
+  <select id="filter-status">
     <option value="">Все статусы</option>
     <option value="Свободен">Свободен</option>
     <option value="Бронь">Бронь</option>
@@ -206,7 +194,7 @@
   <div class="legend-item"><div class="legend-color legend-Бронь"></div> Бронь</div>
   <div class="legend-item"><div class="legend-color legend-Продан"></div> Продан</div>
 </div>
-
+  
 <script>
 
   const plots = [
@@ -5576,9 +5564,6 @@ const mapContainer = document.getElementById('map-container');
         }
       });
 
-      polygon.addEventListener('focus', e => { showTooltip(e, plot); });
-      polygon.addEventListener('blur', e => { hideTooltip(); });
-
       svg.appendChild(polygon);
     });
   }
@@ -5586,12 +5571,11 @@ const mapContainer = document.getElementById('map-container');
   function showTooltip(event, plot) {
     tooltip.style.display = 'block';
     tooltip.setAttribute('aria-hidden', 'false');
-    tooltip.innerHTML = `
-      <b>Участок №${plot.num}</b><br>
-      Площадь: ${plot.area} сот.<br>
-      Цена: ${Math.round(parseFloat(plot.price)).toLocaleString('ru-RU')} ₽<br>
-      Статус: ${plot.status}
-    `;
+    tooltip.innerHTML =
+      `<b>Участок №${plot.num}</b><br>` +
+      `Площадь: ${plot.area} сот.<br>` +
+      `Цена: ${Math.round(parseFloat(plot.price)).toLocaleString('ru-RU')} ₽<br>` +
+      `Статус: ${plot.status}`;
     moveTooltip(event);
   }
 
@@ -5604,13 +5588,23 @@ const mapContainer = document.getElementById('map-container');
   function moveTooltip(event) {
     const containerRect = mapContainer.getBoundingClientRect();
     const tooltipRect = tooltip.getBoundingClientRect();
+    const viewportWidth = window.innerWidth;
+
     let left = event.clientX - containerRect.left + 15;
     let top = event.clientY - containerRect.top + 15;
 
+    // Не выходит за ширину контейнера
     if (left + tooltipRect.width > containerRect.width) {
       left = event.clientX - containerRect.left - tooltipRect.width - 15;
       if (left < 0) left = 0;
     }
+
+    // Не выходит за ширину экрана (дополнительная проверка)
+    if (left + tooltipRect.width > viewportWidth) {
+      left = viewportWidth - tooltipRect.width - 10; // 10px отступ справа
+      if (left < 0) left = 0;
+    }
+
     if (top + tooltipRect.height > containerRect.height) {
       top = event.clientY - containerRect.top - tooltipRect.height - 15;
       if (top < 0) top = 0;
@@ -5633,6 +5627,5 @@ const mapContainer = document.getElementById('map-container');
   if (mapImg.complete) renderPlots();
   window.addEventListener('resize', renderPlots);
 </script>
-
 </body>
 </html>
